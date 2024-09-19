@@ -17,24 +17,25 @@ Install the required package:
 pip install requests
 ```
 
-## How to Use
 
-    Clone the repository or copy the script into your project:
+## Setup
+
+- Clone the repository or create the script with the provided Python code.
+
+- rename .env.sample to .env and add your Hedera account ID:
+
 ```
-git clone https://github.com/nadineloepfe/mirrornode-transactionsize-check.git
+ACCOUNT_ID=0.0.xxxxxxx
 ```
 
-Run the script using your Hedera account ID:
+- Replace 0.0.xxxxxxx with your Hedera account ID.
+
+Run the script by executing the following command:
 
 ```
 python find_sequence_pattern.py
 ```
 
-Replace the account ID in the script with your own Hedera Testnet account ID:
-
-```
-find_sequence_pattern('0.0.yourAccountID')
-```
 
 ## Code Explanation
 

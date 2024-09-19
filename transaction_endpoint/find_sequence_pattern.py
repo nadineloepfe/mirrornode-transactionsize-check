@@ -2,8 +2,8 @@ import requests
 import os
 from dotenv import load_dotenv
 
-def analyse_transactions(account_id):
-    base_url = 'https://testnet.mirrornode.hedera.com'
+def find_sequence_pattern(account_id):
+    base_url = f'https://{os.getenv("ENVIRONMENT")}.mirrornode.hedera.com'
     url = f'{base_url}/api/v1/transactions?account.id={account_id}&limit=500'
 
     all_transactions = []
@@ -187,4 +187,4 @@ if __name__ == "__main__":
         print("Error: ACCOUNT_ID environment variable not set.")
         sys.exit(1)
 
-    analyse_transactions(account_id)
+    find_sequence_pattern(account_id)

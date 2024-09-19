@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 def check_function_param_size(account_id):
-    base_url = 'https://testnet.mirrornode.hedera.com'
+    base_url = f'https://{os.getenv("ENVIRONMENT")}.mirrornode.hedera.com'
 
     # fetch CONTRACTCALL and CONTRACTCREATEINSTANCE transactions
     urls = [
