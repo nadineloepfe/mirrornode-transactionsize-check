@@ -23,8 +23,6 @@ pip install requests
 
 1) Clone the repository or create the script with the provided Python code.
 
-2) rename .env.sample to .env and add your Hedera account ID:
-
 2) Rename .env.sample to .env and add the Hedera account ID as well as the chosen environment (testnet, mainnet..):
 
 ```
