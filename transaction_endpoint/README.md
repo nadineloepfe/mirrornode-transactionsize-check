@@ -9,13 +9,13 @@ Features
 
 ## Prerequisites
 
-    Python 3.x
+Python 3.x
 
-    Install the required package:
+Install the required package:
 
-    ```
-    pip install requests
-    ```
+```
+pip install requests
+```
 
 ## How to Use
 
