@@ -1,3 +1,4 @@
+# Find File Sequence Pattern Script
 
 This Python script analyses Ethereum transactions on the Hedera Testnet, identifying and classifying transactions into large ("big transactions") and small categories. It determines whether a transaction includes specific file operations such as FILECREATE, FILEAPPEND, ETHEREUMTRANSACTION, and FILEDELETE, and whether they occur within a specified 30-second time window.
 Features
@@ -20,17 +21,20 @@ pip install requests
 
 ## Setup
 
-- Clone the repository or create the script with the provided Python code.
+1) Clone the repository or create the script with the provided Python code.
 
-- rename .env.sample to .env and add your Hedera account ID:
+2) rename .env.sample to .env and add your Hedera account ID:
+
+2) Rename .env.sample to .env and add the Hedera account ID as well as the chosen environment (testnet, mainnet..):
 
 ```
 ACCOUNT_ID=0.0.xxxxxxx
+ENVIRONMENT=testnet
 ```
 
-- Replace 0.0.xxxxxxx with your Hedera account ID.
+3) Replace 0.0.xxxxxxx with your Hedera account ID.
 
-Run the script by executing the following command:
+4) Run the script by executing the following command:
 
 ```
 python find_sequence_pattern.py

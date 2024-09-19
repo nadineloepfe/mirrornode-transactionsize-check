@@ -29,17 +29,20 @@ pip install -r requirements.txt
 
 ## Setup
 
-- Clone the repository or create the script with the provided Python code.
+1) Clone the repository or create the script with the provided Python code.
 
-- rename .env.sample to .env and add your Hedera account ID:
+2) rename .env.sample to .env and add your Hedera account ID:
+
+2) Rename .env.sample to .env and add the Hedera account ID as well as the chosen environment (testnet, mainnet..):
 
 ```
 ACCOUNT_ID=0.0.xxxxxxx
+ENVIRONMENT=testnet
 ```
 
-- Replace 0.0.xxxxxxx with your Hedera account ID.
+3) Replace 0.0.xxxxxxx with your Hedera account ID.
 
-Run the script by executing the following command:
+4) Run the script by executing the following command:
 
 ```
 python check_function_param_size.py

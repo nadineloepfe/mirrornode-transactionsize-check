@@ -50,12 +50,16 @@ def calculate_percentage(over_5kb, under_5kb):
     return over_5kb_percent, under_5kb_percent
 
 if __name__ == "__main__":
+    print("Starting the process...")
+
     # run check_function_param_size.py
     print("\nRunning check_function_param_size.py...")
     contract_output = run_script('contract_endpoint/check_function_param_size.py')
 
     # run find_sequence_pattern.py
     print("\nRunning find_sequence_pattern.py...")
+    
+    print("(This could take some time. Get a coffee.)")  # Message after "Running find_sequence_pattern.py..."
     transaction_output = run_script('transaction_endpoint/find_sequence_pattern.py')
 
     # extract stats for contract and transaction endpoints
@@ -66,15 +70,9 @@ if __name__ == "__main__":
     contract_over_5kb_percent, contract_under_5kb_percent = calculate_percentage(contract_over_5kb, contract_under_5kb)
     tx_over_5kb_percent, tx_under_5kb_percent = calculate_percentage(tx_over_5kb, tx_under_5kb)
 
-    print("\nOutput of find_sequence_pattern.py:\n")
-    print(transaction_output)
-
-    print("\nOutput of check_function_param_size.py:\n")
-    print(contract_output)
-
-    # display the statistics
+    # display the percentages
     print("---------------------------------------")
-    print(             "Statictics")
+    print(              "Statictics")
     print("---------------------------------------")
     print("\n>5kb Transactions:")
     print(f"Ethereum Transactions -> /transactions endpoint: {tx_over_5kb_percent:.2f}%")
