@@ -21,13 +21,13 @@ Features
 
     Clone the repository or copy the script into your project:
 ```
-git clone https://github.com/nadineloepfe/mirrornode-large-transactions.git
+git clone https://github.com/nadineloepfe/mirrornode-transactionsize-check.git
 ```
 
 Run the script using your Hedera account ID:
 
 ```
-python sequence_pattern.py
+python find_sequence_pattern.py
 ```
 
 Replace the account ID in the script with your own Hedera Testnet account ID:
