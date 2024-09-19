@@ -29,9 +29,10 @@ def analyse_transactions(account_id):
 
                 # store transactions timestamp and type
                 all_transactions.append({
-                    'timestamp': float(tx['consensus_timestamp']),
-                    'type': tx['name']
-                })
+                'timestamp': float(tx['consensus_timestamp']),
+                'type': tx['name'],
+                'entity_id': tx.get('entity_id', None)
+            })
 
             # pagination
             next_link = data['links'].get('next')
@@ -72,6 +73,7 @@ def process_transactions(all_transactions, time_window=30):
     big_transactions = {}          # stores counts of big transactions by number of chunks
     small_transaction_count = 0    # counts small ethereum transactions
     processed_indices = set()      # tracks indices of transactions already processed
+    first_sequence_printed = False
 
     # process big transactions first
     for i, tx in enumerate(all_transactions):
@@ -89,6 +91,14 @@ def process_transactions(all_transactions, time_window=30):
                     # categorise by chunk count
                     chunk_key = f'{append_count} Chunks' if append_count <= 10 else '>10 Chunks'
                     big_transactions[chunk_key] = big_transactions.get(chunk_key, 0) + 1
+
+                    # check to see how sequence looks like        
+                    if not first_sequence_printed:
+                        print("\nFirst big transaction sequence found (for sanity check):")
+                        for seq_tx in sequence:
+                            print(f"Timestamp: {seq_tx['timestamp']}, Type: {seq_tx['type']}, Entity ID: {seq_tx.get('entity_id')}")
+                        first_sequence_printed = True
+
 
     # process remaining ethereum transactions not part of big transactions
     for i, tx in enumerate(all_transactions):
@@ -109,6 +119,7 @@ def collect_sequence(start_index, all_transactions, time_window):
     indices = []
     n = len(all_transactions)
     create_time = all_transactions[start_index]['timestamp']
+    file_entity_id = all_transactions[start_index]['entity_id']
 
     append_count = 0
     has_ethereum_tx = False
@@ -120,6 +131,11 @@ def collect_sequence(start_index, all_transactions, time_window):
         if time_diff > time_window:
             # timewindow exceeded
             break
+
+        # check file operations have the same entity_id
+        if tx['type'] in ['FILEAPPEND', 'FILEDELETE']:
+            if tx['entity_id'] != file_entity_id:
+                continue  
 
         sequence.append(tx)
         indices.append(i)
@@ -153,7 +169,11 @@ def is_valid_big_transaction(sequence):
         last_append_index = max(idx for idx, t in enumerate(types_in_sequence) if t == 'FILEAPPEND')
 
         if filecreate_index < last_append_index < min(ethereum_tx_indices) < filedelete_index:
-            return True, append_count
+            entity_ids = set(tx['entity_id'] for tx in sequence if tx['type'] in ['FILECREATE', 'FILEAPPEND', 'FILEDELETE'])
+            if len(entity_ids) == 1:
+                return True, append_count
+            else:
+                return False, append_count
 
     return False, append_count
 
