@@ -1,7 +1,6 @@
 # Find File Sequence Pattern Script
 
-This Python script analyses Ethereum transactions on the Hedera Testnet, identifying and classifying transactions into large ("big transactions") and small categories. It determines whether a transaction includes specific file operations such as FILECREATE, FILEAPPEND, ETHEREUMTRANSACTION, and FILEDELETE, and whether they occur within a specified 30-second time window.
-Features
+This Python script analyses Ethereum transactions on the Hedera Testnet, identifying and classifying transactions into large ("big transactions") and small categories. It determines whether a transaction includes specific file operations such as FILECREATE, FILEAPPEND, ETHEREUMTRANSACTION, and FILEDELETE, and whether they share the same entity_id.
 
 - Retrieves and processes all transactions for a specific Hedera Testnet account.
 - Identifies transactions larger than 5kb by analysing sequences of file operations.
@@ -97,15 +96,14 @@ Big Transaction Sequences Breakdown:
 Fetches all transactions for the specified account from the Hedera Testnet Mirror Node.
 Filters the transactions initiated by the account.
 
-### process_transactions(all_transactions, time_window=30)
+### process_transactions(all_transactions)
 
 Processes all fetched transactions.
 Detects big and small transactions.
-Ensures the correct sequence and time frame for big transactions.
 
-### collect_sequence(start_index, all_transactions, time_window)
+### collect_sequence(start_index, all_transactions)
 
-Collects transactions within the specified time window and checks for file operations.
+Collects transactions and checks for file operations.
 
 ### is_valid_big_transaction(sequence)
 

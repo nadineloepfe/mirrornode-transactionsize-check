@@ -15,7 +15,7 @@ The script evaluates the function_parameters size of CONTRACTCALL or CONTRACTCRE
 This script runs both the transaction and contract endpoint scripts, gathers the data, and calculates the statistics for both endpoints. It provides a comprehensive view of large transactions across different types of operations on Hedera.
 
 #### Example Output
-
+s
 ```
 Starting the process...
 
