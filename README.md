@@ -5,6 +5,9 @@ This repository is designed to identify large transactions (>5KB) on the Hedera 
 
 ## Code Explanation
 
+### Sequential Operations
+Large transactions (>5kb) involve a series of related operations rather than isolated actions. For instance, creating a file, appending multiple data chunks to it, performing Ethereum transactions, and then deleting the file.
+
 The script processes transactions by fetching them from the Hedera Testnet Mirror Node API. It analyses them to detect sequences that contain:
 
 - FILECREATE: Marks the start of a file operation.
@@ -12,7 +15,9 @@ The script processes transactions by fetching them from the Hedera Testnet Mirro
 - ETHEREUMTRANSACTION: An Ethereum-related transaction.
 - FILEDELETE: Marks the end of a file operation.
 
-The script ensures that these operations all share the same entity_id (file_id).
+### Shared entity_id:
+The script also ensures that these operations all share the same entity_id (file_id) to accurately group related transactions.
+This association indicates that the transactions are part of a single, cohesive operation rather than disparate actions.
 
 
 ## Chunk Breakdown
@@ -84,10 +89,10 @@ ENVIRONMENT=testnet
 
 3) Replace 0.0.xxxxxxx with your Hedera account ID.
 
-4) Run the get_stats.py script located at the root level to get an insight of large transactions.
+4) Run the get_statistics.py script located at the root level to get an insight of large transactions.
 
 ```
-python get_stats.py
+python get_statistics.py
 ```
 
 
