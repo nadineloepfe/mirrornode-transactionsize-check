@@ -9,10 +9,11 @@ logging.basicConfig(level=logging.INFO)
 
 def find_sequence_pattern(account_id):
     environment = os.getenv("ENVIRONMENT")
+    endpoint = os.getenv("VALIDATIONCLOUD_ENDPOINT")
     if not environment:
         logging.error("ENVIRONMENT environment variable not set.")
         sys.exit(1)
-    base_url = f'https://{environment}.mirrornode.hedera.com'
+    base_url = f'https://{environment}.hedera.validationcloud.io/v1/{endpoint}'
     url = f'{base_url}/api/v1/transactions?account.id={account_id}&limit=500'
 
     all_transactions = []
