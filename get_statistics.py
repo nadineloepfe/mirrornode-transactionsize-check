@@ -18,11 +18,12 @@ def find_sequence_pattern(account_id):
     all_transactions = []
 
     logging.info(f'Fetching transactions for account: {account_id}')
+    logging.info(f'This might take a while. Set logging level to DEBUG for more detailed real-time feedback.')
 
     # fetch all tx by account
     while url:
         try:
-            logging.info(f'Fetching URL: {url}')
+            logging.debug(f'Fetching URL: {url}')
             response = requests.get(url)
             response.raise_for_status()
             data = response.json()
@@ -61,15 +62,18 @@ def find_sequence_pattern(account_id):
     # output results
     big_transaction_count = sum(big_transactions.values())
 
-    logging.info(f'\nAnalysis for account {account_id}:')
-    logging.info(f'Total Ethereum transactions: {total_ethereum_transactions}')
-    logging.info(f'Ethereum transactions with file operations (big transactions): {big_transaction_count}')
-    logging.info(f'Ethereum transactions without file operations (small transactions): {small_transaction_count}')
+    print(f'\nAnalysis for account {account_id}:')
+    print(f'Total Ethereum transactions: {total_ethereum_transactions}')
+    print(f'Ethereum transactions with file operations (big transactions): {big_transaction_count}')
+    print(f'Ethereum transactions without file operations (small transactions): {small_transaction_count}')
 
     logging.info('\nBig Transaction Sequences Breakdown:')
     sorted_chunks = sorted(big_transactions.items(), key=lambda x: int(x[0].split(' ')[0]) if x[0][0].isdigit() else 11)
     for chunk_key, count in sorted_chunks:
         logging.info(f'{chunk_key}: {count}')
+
+    # Calculate and print statistics
+    calculate_and_print_statistics(total_ethereum_transactions, big_transaction_count, small_transaction_count)
 
 def process_transactions(all_transactions):
     """
@@ -186,6 +190,22 @@ def is_valid_big_transaction(sequence):
             return False, append_count
 
     return False, append_count
+
+def calculate_and_print_statistics(total_eth_tx, big_tx_count, small_tx_count):
+    """
+    Calculates and prints statistics about transaction sizes.
+    """
+    if total_eth_tx == 0:
+        print("\nStatistics:")
+        print("No Ethereum transactions to analyze.")
+        return
+
+    percent_over = (big_tx_count / total_eth_tx) * 100
+    percent_under = (small_tx_count / total_eth_tx) * 100
+
+    print("\nStatistics:")
+    print(f"Transactions over 5kb: {percent_over:.2f}%")
+    print(f"Transactions under 5kb: {percent_under:.2f}%")
 
 if __name__ == "__main__":
     # load from .env file

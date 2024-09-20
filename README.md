@@ -1,52 +1,74 @@
 # Mirrornode Transaction size check
 
-This repository is designed to identify large transactions (>5KB) on the Hedera network. It does this through two primary endpoints: /transaction and /contract.
+This repository is designed to identify large transactions (>5KB) on the Hedera network. It does this through analysing the /transaction endpoint.
 
 
-## Overview
+## Code Explanation
 
-### Transaction Endpoint (transaction_endpoint)
-The script checks for file operations (FILEUPDATE, FILEAPPEND, FILEDELETE) that typically accompany large Ethereum transactions. It ensures that the transactions associated with these operations share the same entity_id, signifying a cohesive transaction flow.
+The script processes transactions by fetching them from the Hedera Testnet Mirror Node API. It analyses them to detect sequences that contain:
 
-### Contract Endpoint (contract_endpoint)
-The script evaluates the function_parameters size of CONTRACTCALL or CONTRACTCREATEINSTANCE transactions, identifying those exceeding 5KB, which can indicate large or complex contract operations.
+- FILECREATE: Marks the start of a file operation.
+- FILEAPPEND: Adds chunks of data.
+- ETHEREUMTRANSACTION: An Ethereum-related transaction.
+- FILEDELETE: Marks the end of a file operation.
 
-### Root-Level Script (get_stats.py)
-This script runs both the transaction and contract endpoint scripts, gathers the data, and calculates the statistics for both endpoints. It provides a comprehensive view of large transactions across different types of operations on Hedera.
+The script ensures that these operations happen within a 30-second window and in the correct order.
+
+
+## Chunk Breakdown
+
+Big transactions (those involving file operations) are categorised by how many chunks (FILEAPPEND operations) they contain. The breakdown groups transactions with more than 10 chunks into a single category (>10 Chunks).
+
+
+## Code Structure
+
+### fetch_transactions(account_id)
+
+Fetches all transactions for the specified account from the Hedera Testnet Mirror Node.
+Filters the transactions initiated by the account.
+
+### process_transactions(all_transactions)
+
+Processes all fetched transactions.
+Detects big and small transactions.
+
+### collect_sequence(start_index, all_transactions)
+
+Collects transactions and checks for file operations.
+
+### is_valid_big_transaction(sequence)
+
+Checks if the sequence contains the required file operations (FILECREATE, FILEAPPEND, ETHEREUMTRANSACTION, FILEDELETE) and ensures they occur in the correct order.
+
 
 #### Example Output
-s
+
 ```
-Starting the process...
+INFO: Fetching transactions for account: 0.0.xxx
+INFO: Total transactions fetched: 1400
+INFO: 7040 transactions initiated by account 0.0.xxx.
 
-Running check_function_param_size.py...
+Analysis for account 0.0.xxx:
+Total Ethereum transactions: 7040
+Ethereum transactions with file operations (big transactions): 474
+Ethereum transactions without file operations (small transactions): 6566
 
-Running find_sequence_pattern.py...
-(This could take some time. Get a coffee.)
+Big Transaction Sequences Breakdown:
+1 Chunks: 9
+2 Chunks: 120
+3 Chunks: 43
+4 Chunks: 52
+5 Chunks: 16
+6 Chunks: 49
+7 Chunks: 113
+8 Chunks: 27
+9 Chunks: 16
+10 Chunks: 12
+>10 Chunks: 17
 
-Total Transactions:
-Ethereum Transactions -> /transactions endpoint: 150
-Contract Transactions -> /contract endpoint: 80
-
-Transactions over 5KB:
-Ethereum Transactions -> /transactions endpoint: 90
-Contract Transactions -> /contract endpoint: 35
-
-Transactions under 5KB:
-Ethereum Transactions -> /transactions endpoint: 60
-Contract Transactions -> /contract endpoint: 45
-
----------------------------------------
-              Statictics
----------------------------------------
-
->5kb Transactions:
-Ethereum Transactions -> /transactions endpoint: 60.00%
-Contract Transactions -> /contract endpoint: 43.75%
-
-<5kb Transactions:
-Ethereum Transactions -> /transactions endpoint: 40.00%
-Contract Transactions -> /contract endpoint: 56.25%
+Statistics:
+Big Transactions: 6.73%
+Small Transactions: 93.27%
 ```
 
 ## How to Use
@@ -76,3 +98,4 @@ Make sure to install the necessary dependencies by running:
 ```
 pip install -r requirements.txt
 ```
+
