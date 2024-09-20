@@ -80,11 +80,12 @@ Small Transactions: 93.27%
 
 1) Clone this repository.
 
-2) Rename .env.sample to .env and add the Hedera account ID as well as the chosen environment (testnet, mainnet..):
+2) Rename .env.sample to .env and add the Hedera account ID as well as the chosen environment (testnet, mainnet..) & Validationcloud endpoint:
 
 ```
 ACCOUNT_ID=0.0.xxxxxxx
 ENVIRONMENT=testnet
+VALIDATIONCLOUD_ENDPOINT=Ysdbgrwrwy...
 ```
 
 3) Replace 0.0.xxxxxxx with your Hedera account ID.
