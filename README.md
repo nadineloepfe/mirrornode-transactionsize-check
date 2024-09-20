@@ -12,7 +12,7 @@ The script processes transactions by fetching them from the Hedera Testnet Mirro
 - ETHEREUMTRANSACTION: An Ethereum-related transaction.
 - FILEDELETE: Marks the end of a file operation.
 
-The script ensures that these operations happen within a 30-second window and in the correct order.
+The script ensures that these operations all share the same entity_id (file_id).
 
 
 ## Chunk Breakdown
